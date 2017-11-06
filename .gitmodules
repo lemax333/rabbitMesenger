@@ -1,0 +1,3 @@
+[submodule "server"]
+	path = server
+	url = /home/lemax333/Vistula/Diploma/rabbitMesenger/server
