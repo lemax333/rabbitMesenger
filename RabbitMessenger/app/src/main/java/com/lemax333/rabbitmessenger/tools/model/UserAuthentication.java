@@ -1,12 +1,18 @@
-package com.rmessenger.server.rest.model;
+package com.lemax333.rabbitmessenger.tools.model;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
+/**
+ * Created by lemax333 on 19.11.17.
+ */
 
 public class UserAuthentication {
 
     private String login;
     private String password;
 
+    public UserAuthentication(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 
     public String getLogin() {
         return login;
