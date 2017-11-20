@@ -5,6 +5,7 @@ public class UserData {
     private int id;
     private String username;
     private String password;
+    private String exchange;
 
     public int getId() {
         return id;
@@ -28,5 +29,13 @@ public class UserData {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getExchange() {
+        return exchange;
+    }
+
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
     }
 }
