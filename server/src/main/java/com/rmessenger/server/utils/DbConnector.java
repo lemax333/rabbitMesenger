@@ -32,7 +32,7 @@ public class DbConnector {
             st.setString(2, newUser.getUsername());
             st.setString(3, newUser.getPassword());
             st.setString(4, newUser.getExchange());
-            st.executeQuery();
+            st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -46,7 +46,6 @@ public class DbConnector {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
                 result = resultSet.getString(1);
-                System.out.println(result);
             }
         } catch (SQLException e) {
             //e.printStackTrace();
