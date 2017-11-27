@@ -45,7 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * A exchange screen that offers exchange via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };
     /**
-     * Keep track of the login task to ensure we can cancel it if requested.
+     * Keep track of the exchange task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
@@ -79,10 +79,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        retrofit = new Retrofit.Builder().baseUrl("http://172.20.12.27:8080")
+        retrofit = new Retrofit.Builder().baseUrl("http://172.20.11.171:8080")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         rabbitMessengerApi = retrofit.create(RabbitMessengerApi.class);
-        // Set up the login form.
+        // Set up the exchange form.
         mEmailView = findViewById(R.id.email);
         populateAutoComplete();
 
@@ -155,9 +155,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in or register the account specified by the exchange form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual exchange attempt is made.
      */
     private void attemptLogin() {
         if (mAuthTask != null) {
@@ -168,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
+        // Store values at the time of the exchange attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -194,12 +194,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt exchange and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // perform the user exchange attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI and hides the exchange form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -307,7 +307,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
+     * Represents an asynchronous exchange/registration task used to authenticate
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
@@ -315,7 +315,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mEmail;
         private final String mPassword;
         private final UserAuthentication userAuthentication;
-        private String login;
+        private String exchange;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -331,7 +331,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // Simulate network access.
                 //Thread.sleep(2000);
                 Response response = rabbitMessengerApi.login(userAuthentication).execute();
-                login = response.message();
+                exchange = response.message();
             } catch (IOException e) {
                 return false;
             }
@@ -344,7 +344,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            Toast.makeText(getApplicationContext(), login, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), exchange, Toast.LENGTH_LONG).show();
 
             /*if (success) {
                 finish();

@@ -1,5 +1,6 @@
 package com.rmessenger.server.rest;
 
+import com.rmessenger.server.rest.model.Conversation;
 import com.rmessenger.server.rest.model.UserData;
 import com.rmessenger.server.utils.DbConnector;
 import com.rmessenger.server.utils.QueueHelper;
@@ -38,5 +39,13 @@ public class ApiMethods {
         newUser.setExchange(exchangeName);
         connector.createNewUser(newUser);
         return exchangeName;
+    }
+
+    @RequestMapping(value = "/api/create/conversation", method = RequestMethod.POST, consumes = "application/json")
+    public String createConversation(@RequestBody Conversation newConversation){
+        //TODO insert new conversation to db
+        //TODO insert new user_conversation for each user
+        //TODO add routeId(conversation name)for each user exchange
+        return null;
     }
 }
