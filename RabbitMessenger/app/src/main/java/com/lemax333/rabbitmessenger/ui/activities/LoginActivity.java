@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lemax333.rabbitmessenger.R;
-import com.lemax333.rabbitmessenger.tools.model.UserAuthentication;
+import com.lemax333.rabbitmessenger.tools.model.UserAuthenticationRequest;
 import com.lemax333.rabbitmessenger.tools.rest.RabbitMessengerApi;
 
 import retrofit2.Response;
@@ -314,13 +314,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        private final UserAuthentication userAuthentication;
+        private final UserAuthenticationRequest userAuthenticationRequest;
         private String exchange;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
-            userAuthentication = new UserAuthentication(email,password);
+            userAuthenticationRequest = new UserAuthenticationRequest(email,password);
         }
 
         @Override
@@ -330,7 +330,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 // Simulate network access.
                 //Thread.sleep(2000);
-                Response response = rabbitMessengerApi.login(userAuthentication).execute();
+                Response response = rabbitMessengerApi.login(userAuthenticationRequest).execute();
                 exchange = response.message();
             } catch (IOException e) {
                 return false;

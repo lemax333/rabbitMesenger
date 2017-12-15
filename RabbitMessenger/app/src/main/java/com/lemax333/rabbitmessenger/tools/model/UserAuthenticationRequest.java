@@ -4,12 +4,12 @@ package com.lemax333.rabbitmessenger.tools.model;
  * Created by lemax333 on 19.11.17.
  */
 
-public class UserAuthentication {
+public class UserAuthenticationRequest {
 
     private String login;
     private String password;
 
-    public UserAuthentication(String login, String password) {
+    public UserAuthenticationRequest(String login, String password) {
         this.login = login;
         this.password = password;
     }
