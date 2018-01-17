@@ -35,8 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lemax333.rabbitmessenger.R;
+import com.lemax333.rabbitmessenger.tools.common.Constants;
 import com.lemax333.rabbitmessenger.tools.model.UserAuthenticationRequest;
 import com.lemax333.rabbitmessenger.tools.rest.RabbitMessengerApi;
+import com.lemax333.rabbitmessenger.tools.rest.RestHelper;
 
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -44,26 +46,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-/**
- * A exchange screen that offers exchange via email/password.
- */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the exchange task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -72,19 +57,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    private Retrofit retrofit;
-    RabbitMessengerApi rabbitMessengerApi;
+    private RabbitMessengerApi rabbitMessengerApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        retrofit = new Retrofit.Builder().baseUrl("http://172.20.11.171:8080")
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        rabbitMessengerApi = retrofit.create(RabbitMessengerApi.class);
+        rabbitMessengerApi = RestHelper.getRabbitMessengerApi();
         // Set up the exchange form.
         mEmailView = findViewById(R.id.email);
-        populateAutoComplete();
+        //populateAutoComplete();
 
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -208,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;//email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {

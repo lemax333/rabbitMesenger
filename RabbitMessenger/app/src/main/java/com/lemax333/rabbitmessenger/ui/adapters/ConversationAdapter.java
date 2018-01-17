@@ -47,7 +47,7 @@ public class ConversationAdapter extends BaseAdapter {
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = layoutInflater.inflate(R.layout.conversation_view, viewGroup);
+        view = layoutInflater.inflate(R.layout.conversation_item, viewGroup);
         Conversation conversation = getConversation(i);
         ((TextView) view.findViewById(R.id.conversationName)).setText(conversation.getName());
         ((TextView) view.findViewById(R.id.lastMessage)).setText(conversation.getLastMessage());

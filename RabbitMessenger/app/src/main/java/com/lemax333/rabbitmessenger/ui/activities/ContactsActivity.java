@@ -9,12 +9,12 @@ import android.view.View;
 
 import com.lemax333.rabbitmessenger.R;
 
-public class ConversationsActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conversations);
+        setContentView(R.layout.activity_contacts);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -27,4 +27,5 @@ public class ConversationsActivity extends AppCompatActivity {
             }
         });
     }
+
 }
