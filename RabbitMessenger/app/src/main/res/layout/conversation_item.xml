@@ -19,7 +19,8 @@
         android:layout_above="@+id/lastMessage"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/conversationIcon"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="24dp"/>
 
     <TextView
         android:id="@+id/lastMessage"

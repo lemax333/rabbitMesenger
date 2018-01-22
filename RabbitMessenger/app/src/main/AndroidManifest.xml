@@ -26,8 +26,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.ConversationsActivity"
-            android:label="@string/title_activity_conversations"
+            android:name=".ui.activities.ContactsActivity"
+            android:label="@string/title_activity_contacts"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

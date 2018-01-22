@@ -38,6 +38,7 @@ import com.lemax333.rabbitmessenger.R;
 import com.lemax333.rabbitmessenger.tools.model.request.LoginRequest;
 import com.lemax333.rabbitmessenger.tools.model.response.LoginResponse;
 import com.lemax333.rabbitmessenger.tools.rest.RabbitMessengerApi;
+import com.lemax333.rabbitmessenger.tools.rest.RestHelper;
 
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -55,8 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
-    private Retrofit retrofit;
-    RabbitMessengerApi rabbitMessengerApi;
+    private RabbitMessengerApi rabbitMessengerApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
