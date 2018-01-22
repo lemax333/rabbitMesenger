@@ -2,6 +2,7 @@ package com.rmessenger.server.rest;
 
 import com.rmessenger.server.rest.model.Conversation;
 import com.rmessenger.server.rest.model.UserData;
+import com.rmessenger.server.rest.model.response.LoginResponse;
 import com.rmessenger.server.utils.DbConnector;
 import com.rmessenger.server.utils.QueueHelper;
 import com.rmessenger.server.utils.StringUtils;
@@ -21,15 +22,15 @@ public class ApiMethods {
     QueueHelper queueHelper;
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST, consumes = "application/json")
-    public String login(@RequestBody UserData userData){
-        String resultString = "";
+    public LoginResponse login(@RequestBody UserData userData){
+        String exchange = "";
         String password = connector.getUserPassword(userData.getUsername());
         if (!password.equals(userData.getPassword())) {
-            resultString = "Wrong username or password";
+            exchange = "Wrong username or password";
         } else {
-            resultString = connector.getUserExhange(userData.getUsername());
+            exchange = connector.getUserExhange(userData.getUsername());
         }
-        return resultString;
+        return new LoginResponse(exchange);
     }
 
     @RequestMapping(value = "/api/register", method = RequestMethod.POST, consumes = "application/json")

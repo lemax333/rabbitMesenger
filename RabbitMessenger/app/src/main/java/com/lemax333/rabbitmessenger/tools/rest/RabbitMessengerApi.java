@@ -1,6 +1,7 @@
 package com.lemax333.rabbitmessenger.tools.rest;
 
-import com.lemax333.rabbitmessenger.tools.model.UserAuthenticationRequest;
+import com.lemax333.rabbitmessenger.tools.model.request.LoginRequest;
+import com.lemax333.rabbitmessenger.tools.model.response.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -13,8 +14,8 @@ import retrofit2.http.POST;
 public interface RabbitMessengerApi {
 
     @POST("/api/login")
-    Call<String> login(@Body UserAuthenticationRequest userAuthenticationRequest);
+    Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
     @POST("/api/register")
-    Call<String> register(@Body UserAuthenticationRequest userAuthenticationRequest);
+    Call<String> register(@Body LoginRequest loginRequest);
 }

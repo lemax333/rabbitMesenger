@@ -1,4 +1,4 @@
-package com.lemax333.rabbitmessenger.ui;
+package com.lemax333.rabbitmessenger.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
