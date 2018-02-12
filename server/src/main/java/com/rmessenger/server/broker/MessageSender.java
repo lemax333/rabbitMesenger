@@ -15,6 +15,4 @@ public class MessageSender {
     public void sendMessage(String conversation, String jsonMessage) {
         template.convertAndSend(Constants.CONVERSTATION_INCOMING_EXCHANGE, conversation, jsonMessage);
     }
-
-
 }

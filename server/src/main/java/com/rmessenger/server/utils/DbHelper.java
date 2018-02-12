@@ -4,14 +4,16 @@ import com.rmessenger.server.rest.model.UserData;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @Component
-public class DbConnector {
+public class DbHelper {
 
     private Connection connection;
 
-    public DbConnector(){
+    public DbHelper(){
         Properties props = new Properties();
         props.setProperty("user",  Constants.POSTGRES_USER);
         props.setProperty("password", Constants.POSTGRES_USER_PASSWORD);
@@ -27,11 +29,11 @@ public class DbConnector {
 
     public void createNewUser(UserData newUser){
         try {
-            PreparedStatement st = this.connection.prepareStatement("INSERT INTO users VALUES (?,?,?,?)");
-            st.setInt(1, newUser.getId());
-            st.setString(2, newUser.getUsername());
-            st.setString(3, newUser.getPassword());
-            st.setString(4, newUser.getExchange());
+            PreparedStatement st = this.connection.prepareStatement("INSERT INTO users (username, password, exchange) VALUES (?,?,?)");
+//            st.setInt(1, newUser.getId());
+            st.setString(1, newUser.getUsername());
+            st.setString(2, newUser.getPassword());
+            st.setString(3, newUser.getExchange());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,12 +50,12 @@ public class DbConnector {
                 result = resultSet.getString(1);
             }
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return result;
     }
 
-    public String getUserExhange(String username){
+    public String getUserExchange(String username){
         String result = "";
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement("SELECT exchange FROM users WHERE username = ?");
@@ -63,7 +65,22 @@ public class DbConnector {
                 result += resultSet.getString(1);
             }
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public List<String> getUserContacts(String username){
+        List<String> result = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(DbStatementsBuilder.buildGettingContacts());
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                result.add(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return result;
     }

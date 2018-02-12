@@ -2,8 +2,12 @@ package com.rmessenger.server.rest;
 
 import com.rmessenger.server.rest.model.Conversation;
 import com.rmessenger.server.rest.model.UserData;
+import com.rmessenger.server.rest.model.request.GetContactsRequest;
+import com.rmessenger.server.rest.model.request.LoginRequest;
+import com.rmessenger.server.rest.model.response.GetContactsResponse;
 import com.rmessenger.server.rest.model.response.LoginResponse;
-import com.rmessenger.server.utils.DbConnector;
+import com.rmessenger.server.rest.model.response.RegisterResponse;
+import com.rmessenger.server.utils.DbHelper;
 import com.rmessenger.server.utils.QueueHelper;
 import com.rmessenger.server.utils.StringUtils;
 import org.springframework.amqp.core.FanoutExchange;
@@ -13,33 +17,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class ApiMethods {
 
     @Autowired
-    DbConnector connector;
+    DbHelper dbHelper;
     @Autowired
     QueueHelper queueHelper;
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST, consumes = "application/json")
-    public LoginResponse login(@RequestBody UserData userData){
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
         String exchange = "";
-        String password = connector.getUserPassword(userData.getUsername());
-        if (!password.equals(userData.getPassword())) {
+        String password = dbHelper.getUserPassword(loginRequest.getUsername());
+        if (!password.equals(loginRequest.getPassword())) {
             exchange = "Wrong username or password";
         } else {
-            exchange = connector.getUserExhange(userData.getUsername());
+            exchange = dbHelper.getUserExchange(loginRequest.getUsername());
         }
         return new LoginResponse(exchange);
     }
 
     @RequestMapping(value = "/api/register", method = RequestMethod.POST, consumes = "application/json")
-    public String register(@RequestBody UserData newUser){
+    public RegisterResponse register(@RequestBody UserData newUser){
         String exchangeName = StringUtils.getRandomString(7);
         FanoutExchange exchange = queueHelper.createExchange(exchangeName);
         newUser.setExchange(exchangeName);
-        connector.createNewUser(newUser);
-        return exchangeName;
+        dbHelper.createNewUser(newUser);
+        RegisterResponse response = new RegisterResponse();
+        response.setExchange(exchangeName);
+        return response;
+    }
+
+    @RequestMapping(value = "/api/contacts", method = RequestMethod.POST, consumes = "application/json")
+    public GetContactsResponse getContacts(@RequestBody GetContactsRequest getContactsRequest){
+        List<String> contacts = dbHelper.getUserContacts(getContactsRequest.getUsername());
+        GetContactsResponse response = new GetContactsResponse();
+        response.setContacts(contacts);
+        return response;
     }
 
     @RequestMapping(value = "/api/create/conversation", method = RequestMethod.POST, consumes = "application/json")

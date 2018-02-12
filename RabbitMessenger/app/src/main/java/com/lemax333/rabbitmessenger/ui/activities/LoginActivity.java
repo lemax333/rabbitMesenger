@@ -3,6 +3,9 @@ package com.lemax333.rabbitmessenger.ui.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -29,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,7 +42,6 @@ import com.lemax333.rabbitmessenger.R;
 import com.lemax333.rabbitmessenger.tools.model.request.LoginRequest;
 import com.lemax333.rabbitmessenger.tools.model.response.LoginResponse;
 import com.lemax333.rabbitmessenger.tools.rest.RabbitMessengerApi;
-import com.lemax333.rabbitmessenger.tools.rest.RestHelper;
 
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -56,13 +59,14 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
-    private RabbitMessengerApi rabbitMessengerApi;
+    private Retrofit retrofit;
+    RabbitMessengerApi rabbitMessengerApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        retrofit = new Retrofit.Builder().baseUrl("http://192.168.0.8:8080")
+        retrofit = new Retrofit.Builder().baseUrl("http://192.168.0.2:8080")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         rabbitMessengerApi = retrofit.create(RabbitMessengerApi.class);
         // Set up the exchange form.
@@ -164,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        private static final String USERNAME = "username";
         private final String mEmail;
         private final String mPassword;
         private final LoginRequest loginRequest;
@@ -190,13 +195,16 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            Toast.makeText(getApplicationContext(), exchange, Toast.LENGTH_LONG).show();
             if (success) {
+                Intent intent = new Intent(LoginActivity.this, ContactsActivity.class);
+                intent.putExtra(USERNAME, mEmail);
+                LoginActivity.this.startActivity(intent);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+
         }
 
         @Override
