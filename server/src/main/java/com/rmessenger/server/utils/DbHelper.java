@@ -85,6 +85,57 @@ public class DbHelper {
         return result;
     }
 
+    public void createNewConversation(String newConversationName) {
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO conversation(name) VALUES (?)");
+            preparedStatement.setString(1, newConversationName);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addUserToConversation(String conversationId, String userId) {
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO conversation_user_x VALUES (?, ?)");
+            preparedStatement.setInt(1, Integer.parseInt(conversationId));
+            preparedStatement.setInt(2, Integer.parseInt(userId));
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getConversationIdByName(String newConversationName) {
+        Integer result = null;
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("SELECT id FROM conversation WHERE name = ?");
+            preparedStatement.setString(1, newConversationName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                result = (resultSet.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return String.valueOf(result);
+    }
+
+    public String getUserIdByName(String firstUser) {
+        String result = "";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("SELECT id FROM users WHERE username = ?");
+            preparedStatement.setString(1, firstUser);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                result += (resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public Connection getConnection() {
         return connection;
     }

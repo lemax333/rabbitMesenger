@@ -1,12 +1,11 @@
 package com.rmessenger.server.rest;
 
-import com.rmessenger.server.rest.model.Conversation;
 import com.rmessenger.server.rest.model.UserData;
+import com.rmessenger.server.rest.model.request.CreateConversationRequest;
 import com.rmessenger.server.rest.model.request.GetContactsRequest;
+import com.rmessenger.server.rest.model.request.GetConversationRequest;
 import com.rmessenger.server.rest.model.request.LoginRequest;
-import com.rmessenger.server.rest.model.response.GetContactsResponse;
-import com.rmessenger.server.rest.model.response.LoginResponse;
-import com.rmessenger.server.rest.model.response.RegisterResponse;
+import com.rmessenger.server.rest.model.response.*;
 import com.rmessenger.server.utils.DbHelper;
 import com.rmessenger.server.utils.QueueHelper;
 import com.rmessenger.server.utils.StringUtils;
@@ -58,11 +57,32 @@ public class ApiMethods {
         return response;
     }
 
-    @RequestMapping(value = "/api/create/conversation", method = RequestMethod.POST, consumes = "application/json")
-    public String createConversation(@RequestBody Conversation newConversation){
+    @RequestMapping(value = "/api/conversation", method = RequestMethod.POST, consumes = "application/json")
+    public GetConversationResponse getConversation(@RequestBody GetConversationRequest conversationRequest){
         //TODO insert new conversation to db
         //TODO insert new user_conversation for each user
         //TODO add routeId(conversation name)for each user exchange
         return null;
+    }
+
+    @RequestMapping(value = "/api/conversation/create", method = RequestMethod.POST, consumes = "application/json")
+    public CreateConversationResponse createConversation(@RequestBody CreateConversationRequest createConversationRequest){
+        String newConversationName = StringUtils.getRandomString(8);
+        dbHelper.createNewConversation(newConversationName);
+        dbHelper.addUserToConversation(getConversationIdByName(newConversationName), getUserIdByName(createConversationRequest.getFirstUser()));
+        dbHelper.addUserToConversation(getConversationIdByName(newConversationName), getUserIdByName(createConversationRequest.getSecondUser()));
+        queueHelper.bindExchangeByConversationId(dbHelper.getUserExchange(createConversationRequest.getFirstUser()),
+                createConversationRequest.getFirstUser());
+        queueHelper.bindExchangeByConversationId(dbHelper.getUserExchange(createConversationRequest.getSecondUser()),
+                createConversationRequest.getSecondUser());
+        return new CreateConversationResponse(newConversationName);
+    }
+
+    private String getConversationIdByName(String newConversationName) {
+        return dbHelper.getConversationIdByName(newConversationName);
+    }
+
+    private String getUserIdByName(String firstUser) {
+        return dbHelper.getUserIdByName(firstUser);
     }
 }

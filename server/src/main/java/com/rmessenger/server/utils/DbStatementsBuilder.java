@@ -1,8 +1,11 @@
 package com.rmessenger.server.utils;
 
+import java.util.List;
+
 public class DbStatementsBuilder {
 
     private static String SELECT_BASE = "SELECT %s FROM %s %s";
+    private static String INSERT_BASE = "INSERT INTO %s VALUES %s";
     private static String CRITERIA_EQUALS_BASE = "WHERE %s = ?";
     private static String CIRTERIA_NOT_EQUALS_BASE = "WHERE %s <> ?";
 
