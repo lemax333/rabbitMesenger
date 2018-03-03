@@ -1,5 +1,6 @@
-package com.rmessenger.server.utils;
+package com.rmessenger.server.config;
 
+import com.rmessenger.server.utils.Constants;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

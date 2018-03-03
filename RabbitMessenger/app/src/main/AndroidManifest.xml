@@ -30,6 +30,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".tools.service.ContactsService" />
+        <service android:name=".tools.service.ConversationService"/>
     </application>
 
 </manifest>

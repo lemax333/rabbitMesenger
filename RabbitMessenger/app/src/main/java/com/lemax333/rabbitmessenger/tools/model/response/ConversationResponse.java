@@ -1,10 +1,14 @@
-package com.rmessenger.server.rest.model.response;
+package com.lemax333.rabbitmessenger.tools.model.response;
 
-public class GetConversationResponse {
+/**
+ * Created by oleksii on 03/03/2018.
+ */
+
+public class ConversationResponse {
 
     private String conversationName;
 
-    public GetConversationResponse(String conversationName) {
+    public ConversationResponse(String conversationName) {
         this.conversationName = conversationName;
     }
 

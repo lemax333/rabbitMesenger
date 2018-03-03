@@ -59,10 +59,10 @@ public class ApiMethods {
 
     @RequestMapping(value = "/api/conversation", method = RequestMethod.POST, consumes = "application/json")
     public GetConversationResponse getConversation(@RequestBody GetConversationRequest conversationRequest){
-        //TODO insert new conversation to db
-        //TODO insert new user_conversation for each user
-        //TODO add routeId(conversation name)for each user exchange
-        return null;
+        String firstUserId = dbHelper.getUserIdByName(conversationRequest.getFirstUser());
+        String secondUserId = dbHelper.getUserIdByName(conversationRequest.getSecondUser());
+        String convesationName = dbHelper.getConversationByParticipantsId(Integer.parseInt(firstUserId), Integer.parseInt(secondUserId));
+        return new GetConversationResponse(convesationName);
     }
 
     @RequestMapping(value = "/api/conversation/create", method = RequestMethod.POST, consumes = "application/json")

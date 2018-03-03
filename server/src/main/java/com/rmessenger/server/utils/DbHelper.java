@@ -95,6 +95,22 @@ public class DbHelper {
         }
     }
 
+    public String getConversationByParticipantsId(int firstUser, int secondUser){
+        String result = "";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("select name from conversation as conv join conversation_user_x as cux on cux.userid=? or cux.userid=? where cux.conversationid = conv.id group by conv.id having count(*) > 1");
+            preparedStatement.setInt(1, firstUser);
+            preparedStatement.setInt(2, secondUser);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                result = resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public void addUserToConversation(String conversationId, String userId) {
         try {
             PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO conversation_user_x VALUES (?, ?)");

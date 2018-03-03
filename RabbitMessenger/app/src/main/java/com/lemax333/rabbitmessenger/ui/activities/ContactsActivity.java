@@ -10,12 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lemax333.rabbitmessenger.R;
 import com.lemax333.rabbitmessenger.tools.service.ContactsService;
+import com.lemax333.rabbitmessenger.tools.service.ConversationService;
 import com.lemax333.rabbitmessenger.utils.Constants;
 
 import java.util.ArrayList;
@@ -26,7 +29,8 @@ public class ContactsActivity extends BaseNavigationDrawerActivity {
     private ListView contactsList;
     private List<String> contacts;
     private ArrayAdapter<String> arrayAdapter;
-    private ContactsReceiver receiver;
+    private ContactsReceiver contactsReceiver;
+    private ConversationReceiver conversationReceiver;
     private final String USERNAME = "username";
     private String userName;
 
@@ -43,25 +47,34 @@ public class ContactsActivity extends BaseNavigationDrawerActivity {
         contacts = new ArrayList<>();
         arrayAdapter = new ArrayAdapter<String>(this, R.layout.contacts_item, R.id.contact, contacts);
         contactsList.setAdapter(arrayAdapter);
-        contactsList.setOnClickListener(new View.OnClickListener() {
+        contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                TextView userNameTextView = (TextView) view;
-                String username = userNameTextView.getText().toString();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String secondUser = contacts.get(i);
+                getConversation(userName, secondUser);
             }
         });
+    }
+
+    private void getConversation(String userName, String secondUser) {
+        Intent intent = new Intent(this, ConversationService.class);
+        intent.putExtra(Constants.DATA_RECEIVER, conversationReceiver);
+        intent.putExtra(ConversationService.FIRST_USER, userName);
+        intent.putExtra(ConversationService.SECONDE_USER, secondUser);
+        startService(intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.receiver = new ContactsReceiver(new Handler());
+        this.contactsReceiver = new ContactsReceiver(new Handler());
+        this.conversationReceiver = new ConversationReceiver(new Handler());
         getContacts();
     }
 
     private void getContacts() {
         Intent intent = new Intent(this, ContactsService.class);
-        intent.putExtra(Constants.DATA_RECEIVER, receiver);
+        intent.putExtra(Constants.DATA_RECEIVER, contactsReceiver);
         intent.putExtra(Constants.USERNAME, userName);
         startService(intent);
     }
@@ -98,6 +111,24 @@ public class ContactsActivity extends BaseNavigationDrawerActivity {
             contacts.clear();
             contacts.addAll(resultData.getStringArrayList(CONTACTS_LIST));
             arrayAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class ConversationReceiver extends ResultReceiver {
+
+        private static final String CONVERSATION_NAME = "conversationName";
+
+        public ConversationReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            String conversationName = resultData.getString(CONVERSATION_NAME);
+            Toast toast = Toast.makeText(getBaseContext(), conversationName, Toast.LENGTH_LONG);
+            toast.show();
+//            Intent intent = new Intent(getBaseContext(), )
         }
     }
 }
