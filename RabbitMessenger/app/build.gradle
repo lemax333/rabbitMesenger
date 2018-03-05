@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.lemax333.rabbitmessenger"
@@ -28,5 +29,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.rabbitmq:amqp-client:5.1.2'
+    compile 'com.rabbitmq:amqp-client:4.5.0'
 }

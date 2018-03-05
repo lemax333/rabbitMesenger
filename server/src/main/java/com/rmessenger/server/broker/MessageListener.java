@@ -16,7 +16,9 @@ public class MessageListener {
     MessageSender sender;
 
     @RabbitListener(queues = Constants.CHAT_APPLICATION_QUEUE)
-    public void receiveMessage(String jsonMessage) throws IOException {
+    public void receiveMessage(byte[] body) throws IOException {
+        String jsonMessage = new String(body, "UTF-8");
+        if (jsonMessage.equals("Hello") || jsonMessage.equals("hello")) return;
         Message message = JsonMapper.getMessage(jsonMessage);
         //write to database
         sender.sendMessage(message.getConversation(), jsonMessage);

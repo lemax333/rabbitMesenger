@@ -72,9 +72,9 @@ public class ApiMethods {
         dbHelper.addUserToConversation(getConversationIdByName(newConversationName), getUserIdByName(createConversationRequest.getFirstUser()));
         dbHelper.addUserToConversation(getConversationIdByName(newConversationName), getUserIdByName(createConversationRequest.getSecondUser()));
         queueHelper.bindExchangeByConversationId(dbHelper.getUserExchange(createConversationRequest.getFirstUser()),
-                createConversationRequest.getFirstUser());
+                newConversationName);
         queueHelper.bindExchangeByConversationId(dbHelper.getUserExchange(createConversationRequest.getSecondUser()),
-                createConversationRequest.getSecondUser());
+                newConversationName);
         return new CreateConversationResponse(newConversationName);
     }
 

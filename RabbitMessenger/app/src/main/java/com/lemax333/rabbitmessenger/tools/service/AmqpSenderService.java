@@ -19,27 +19,36 @@ import java.util.concurrent.TimeoutException;
  * Created by oleksii on 03/03/2018.
  */
 
-public class AmqpSender extends IntentService {
+public class AmqpSenderService extends IntentService {
 
     public static String MESSAGE = "message";
     private ConnectionFactory connectionFactory;
 
-    public AmqpSender(String name) {
+    public AmqpSenderService(){
+        super("AmqpSenderService");
+    }
+
+    public AmqpSenderService(String name) {
         super(name);
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        sendMessage(intent.getStringExtra(MESSAGE));
     }
 
-    private void sendMessage(Message message){
+    private void sendMessage(String message){
         try {
-            Gson gson = new Gson();
-            String jsonMessage = gson.toJson(message);
+            connectionFactory = new ConnectionFactory();
+            connectionFactory.setHost(Constants.AMQP_HOST);
+            connectionFactory.setUsername(Constants.AMQP_USER);
+            connectionFactory.setPassword(Constants.AMQP_PASSWORE);
+//            message.setConversation("srlyncao");
             Connection connection = this.connectionFactory.newConnection();
             Channel channel = connection.createChannel();
             channel.confirmSelect();
-            channel.basicPublish(Constants.EXCHANGE_FOR_SENDING, "", null, jsonMessage.getBytes());
+            channel.basicPublish(Constants.EXCHANGE_FOR_SENDING, "", null, message.getBytes());
+            stopSelf();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {

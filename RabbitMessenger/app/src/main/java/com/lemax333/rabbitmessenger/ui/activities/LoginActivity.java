@@ -169,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private static final String USERNAME = "username";
+        private static final String EXCHANGE = "exchange";
         private final String mEmail;
         private final String mPassword;
         private final LoginRequest loginRequest;
@@ -198,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
             if (success) {
                 Intent intent = new Intent(LoginActivity.this, ContactsActivity.class);
                 intent.putExtra(USERNAME, mEmail);
+                intent.putExtra(EXCHANGE, exchange);
                 LoginActivity.this.startActivity(intent);
                 finish();
             } else {

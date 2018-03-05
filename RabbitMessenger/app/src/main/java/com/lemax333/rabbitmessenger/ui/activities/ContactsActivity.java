@@ -32,13 +32,16 @@ public class ContactsActivity extends BaseNavigationDrawerActivity {
     private ContactsReceiver contactsReceiver;
     private ConversationReceiver conversationReceiver;
     private final String USERNAME = "username";
+    private final String EXCHANGE = "exchange";
     private String userName;
+    private String exchange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         userName = intent.getStringExtra(USERNAME);
+        exchange = intent.getStringExtra(EXCHANGE);
         saveUserName(userName);
         inflateWithLayout(R.layout.activity_contacts);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -128,7 +131,11 @@ public class ContactsActivity extends BaseNavigationDrawerActivity {
             String conversationName = resultData.getString(CONVERSATION_NAME);
             Toast toast = Toast.makeText(getBaseContext(), conversationName, Toast.LENGTH_LONG);
             toast.show();
-//            Intent intent = new Intent(getBaseContext(), )
+            Intent intent = new Intent(ContactsActivity.this, ConversationActivity.class);
+            intent.putExtra(USERNAME, userName);
+            intent.putExtra(EXCHANGE, exchange);
+            intent.putExtra(CONVERSATION_NAME, conversationName);
+            ContactsActivity.this.startActivity(intent);
         }
     }
 }

@@ -29,8 +29,14 @@
             android:label="@string/title_activity_contacts"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity android:name=".ui.activities.ConversationActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="Conversation"/>
+
         <service android:name=".tools.service.ContactsService" />
         <service android:name=".tools.service.ConversationService"/>
+        <service android:name=".tools.service.AmqpSenderService"/>
+        <service android:name=".tools.service.AmqpListenerService" />
     </application>
 
 </manifest>
