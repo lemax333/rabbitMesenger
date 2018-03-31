@@ -30,7 +30,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".ui.activities.ConversationActivity"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="Conversation"/>
 
         <service android:name=".tools.service.ContactsService" />

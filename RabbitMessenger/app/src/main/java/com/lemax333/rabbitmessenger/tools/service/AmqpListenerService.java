@@ -34,9 +34,12 @@ public class AmqpListenerService extends IntentService {
     private String username;
     private String exchange;
     private String queueName;
+    private boolean isRunning = true;
     ResultReceiver receiver;
 
-    public AmqpListenerService(){
+    private Thread subscribeThread;
+
+    public AmqpListenerService() {
         super("AmqpListenerService");
     }
 
@@ -54,32 +57,47 @@ public class AmqpListenerService extends IntentService {
     }
 
     private void declareListener() {
-        try {
-            connectionFactory = new ConnectionFactory();
-            connectionFactory.setHost(Constants.AMQP_HOST);
-            connectionFactory.setUsername(Constants.AMQP_USER);
-            connectionFactory.setPassword(Constants.AMQP_PASSWORE);
-            Connection connection = this.connectionFactory.newConnection();
-            Channel channel = connection.createChannel();
-            channel.confirmSelect();
-            AMQP.Queue.DeclareOk declareOk = channel.queueDeclare(queueName, false, false, false, null);
-            channel.queueBind(queueName, exchange, "");
-            QueueingConsumer consumer = new QueueingConsumer(channel);
-            channel.basicConsume(declareOk.getQueue(), true, consumer);
-
-            while (true) {
-                QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-                String message = new String(delivery.getBody());
-                Bundle bundle = new Bundle();
-                bundle.putString(MESSAGE, message);
-                receiver.send(com.lemax333.rabbitmessenger.utils.Constants.STATUS_OK, bundle);
+        subscribeThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    connectionFactory = new ConnectionFactory();
+                    connectionFactory.setHost(Constants.AMQP_HOST);
+                    connectionFactory.setUsername(Constants.AMQP_USER);
+                    connectionFactory.setPassword(Constants.AMQP_PASSWORE);
+                    Connection connection = connectionFactory.newConnection();
+                    Channel channel = connection.createChannel();
+                    channel.confirmSelect();
+                    AMQP.Queue.DeclareOk declareOk = channel.queueDeclare(queueName, false, false, false, null);
+                    channel.queueBind(queueName, exchange, "");
+                    QueueingConsumer consumer = new QueueingConsumer(channel);
+                    channel.basicConsume(declareOk.getQueue(), true, consumer);
+                    while (true) {
+                        QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+                        String message = new String(delivery.getBody());
+                        Bundle bundle = new Bundle();
+                        bundle.putString(MESSAGE, message);
+                        receiver.send(com.lemax333.rabbitmessenger.utils.Constants.STATUS_OK, bundle);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        });
+        subscribeThread.start();
+        while(isRunning){
+            Log.d("AmqpListenerService", "waiting for messages");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        isRunning = false;
+        subscribeThread.interrupt();
+        super.onDestroy();
     }
 }

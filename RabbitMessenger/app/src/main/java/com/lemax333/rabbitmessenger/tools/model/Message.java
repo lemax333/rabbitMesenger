@@ -10,6 +10,9 @@ public class Message {
     private String text;
     private String conversation;
 
+    public Message() {
+    }
+
     public Message(String author, String text, String conversation) {
         this.author = author;
         this.text = text;

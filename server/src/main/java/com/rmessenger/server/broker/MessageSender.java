@@ -18,6 +18,5 @@ public class MessageSender {
     public void sendMessage(String conversation, String jsonMessage) {
         //dbHelper.get
         template.convertAndSend(Constants.CONVERSTATION_INCOMING_EXCHANGE, conversation, jsonMessage);
-
     }
 }

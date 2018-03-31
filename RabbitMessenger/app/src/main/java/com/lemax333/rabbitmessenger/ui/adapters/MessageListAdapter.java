@@ -1,6 +1,5 @@
 package com.lemax333.rabbitmessenger.ui.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +7,11 @@ import android.view.ViewGroup;
 
 import com.lemax333.rabbitmessenger.R;
 import com.lemax333.rabbitmessenger.tools.model.Message;
+import com.lemax333.rabbitmessenger.ui.adapters.holders.MessageHolder;
 import com.lemax333.rabbitmessenger.ui.adapters.holders.ReceivedMessageHolder;
 import com.lemax333.rabbitmessenger.ui.adapters.holders.SentMessageHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,9 +23,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-    private Context context;
-    private List<Message> messageList;
-    private String userName;
+    private List<Message> messageList = new ArrayList<>();
+    private String userName = "testUser1";
 
     @Override
     public int getItemViewType(int position) {
@@ -36,10 +36,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public MessageListAdapter(Context context, List<Message> messageList, String userName) {
-        this.context = context;
+    public MessageListAdapter(List<Message> messageList) {
         this.messageList = messageList;
-        this.userName = userName;
     }
 
     @Override

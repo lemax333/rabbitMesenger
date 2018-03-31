@@ -1,5 +1,6 @@
 package com.rmessenger.server.utils;
 
+import com.rmessenger.server.broker.model.Message;
 import com.rmessenger.server.rest.model.UserData;
 import org.springframework.stereotype.Component;
 
@@ -150,6 +151,18 @@ public class DbHelper {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public void storeMessage(Message message) {
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO message(senderid, conversationid, content) VALUES (?, ?, ?)");
+            preparedStatement.setInt(1, Integer.parseInt(message.getAuthor()));
+            preparedStatement.setInt(2, Integer.parseInt(message.getConversation()));
+            preparedStatement.setString(3, message.getText());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Connection getConnection() {
