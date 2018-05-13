@@ -24,19 +24,23 @@ public class RabbitMqConfig {
     }
 
     //receiiving messages
+
     @Bean
     Queue incomingMessegesQueue(){
-        return new Queue(Constants.CHAT_APPLICATION_QUEUE, false);
+        return new Queue(Constants.CHAT_APPLICATION_QUEUE,
+                false);
     }
 
     @Bean
     FanoutExchange outgoingExchange() {
-        return new FanoutExchange(Constants.CONVERSATION_OUTGOING_EXHANGE);
+        return new FanoutExchange(
+                Constants.CONVERSATION_OUTGOING_EXHANGE);
     }
 
     @Bean
     Binding bindingIncomingMessageQueue() {
-        return BindingBuilder.bind(incomingMessegesQueue()).to(outgoingExchange());
+        return BindingBuilder.bind(incomingMessegesQueue())
+                .to(outgoingExchange());
     }
 
     //sending messages

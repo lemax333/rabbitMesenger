@@ -11,12 +11,10 @@ import org.springframework.stereotype.Component;
 public class MessageSender {
 
     @Autowired
-    AmqpTemplate template;
-    @Autowired
-    DbHelper dbHelper;
+    private AmqpTemplate template;
 
     public void sendMessage(String conversation, String jsonMessage) {
-        //dbHelper.get
-        template.convertAndSend(Constants.CONVERSTATION_INCOMING_EXCHANGE, conversation, jsonMessage);
+        template.convertAndSend(Constants.CONVERSTATION_INCOMING_EXCHANGE,
+                conversation, jsonMessage);
     }
 }

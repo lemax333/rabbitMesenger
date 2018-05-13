@@ -23,7 +23,7 @@ public class MessageListener {
         String jsonMessage = new String(body, "UTF-8");
         if (jsonMessage.equals("Hello") || jsonMessage.equals("hello")) return;
         Message message = JsonMapper.getMessage(jsonMessage);
-        //write to database
+        //write to com.rmessenger.server.database
         Message messageToDb = new Message();
         messageToDb.setAuthor(dbHelper.getUserIdByName(message.getAuthor()));
         messageToDb.setConversation(dbHelper.getConversationIdByName(message.getConversation()));

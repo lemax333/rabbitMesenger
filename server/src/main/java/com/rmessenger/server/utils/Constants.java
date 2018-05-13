@@ -10,7 +10,7 @@ public class Constants {
     final static String CLIENT2_EXCHANGE = "client2.incoming";
 
     //DB
-    final static String CONNECTION_STRING = "jdbc:postgresql://localhost/RabbitMessenger";
-    final static String POSTGRES_USER = "rabbitadmin";
-    final static String POSTGRES_USER_PASSWORD = "admin";
+    public final static String CONNECTION_STRING = "jdbc:postgresql://localhost/RabbitMessenger";
+    public final static String POSTGRES_USER = "rabbitadmin";
+    public final static String POSTGRES_USER_PASSWORD = "admin";
 }
